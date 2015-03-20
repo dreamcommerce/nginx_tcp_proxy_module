@@ -1876,7 +1876,7 @@ ngx_tcp_upstream_check_status_handler(ngx_http_request_t *r)
                 "    \"fail_count\" : %ui,\n" 
                 "    \"access_count\" : %ui,\n" 
                 "    \"type\" : \"%s\"\n" 
-                "  },\n",
+                "  }%s\n",
                 i, 
                 &peer_conf[i].peer->name, 
                 peer_shm[i].down ? "false" : "true",
@@ -1884,7 +1884,8 @@ ngx_tcp_upstream_check_status_handler(ngx_http_request_t *r)
                 peer_shm[i].rise_count, 
                 peer_shm[i].fall_count, 
                 peer_shm[i].access_count, 
-                peer_conf[i].conf->check_type_conf->name);
+                peer_conf[i].conf->check_type_conf->name,
+                (i < peers_conf->peers.nelts - 1 ? "," : "" ));
     }
 
     b->last = ngx_sprintf(b->last, "]\n");
