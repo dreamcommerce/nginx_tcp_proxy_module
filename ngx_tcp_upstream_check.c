@@ -1867,7 +1867,7 @@ ngx_tcp_upstream_check_status_handler(ngx_http_request_t *r)
 
     for (i = 0; i < peers_conf->peers.nelts; i++) {
         b->last = ngx_sprintf(b->last, 
-                "  {"
+                "  {\n"
                 "    \"index\" : %ui,\n" 
                 "    \"name\" : \"%V\",\n" 
                 "    \"up\" : %s,\n" 
