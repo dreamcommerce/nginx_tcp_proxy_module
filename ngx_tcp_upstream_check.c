@@ -1816,8 +1816,8 @@ ngx_tcp_upstream_check_status_handler(ngx_http_request_t *r)
         return rc;
     }
 
-    r->headers_out.content_type.len = sizeof("text/html; charset=utf-8") - 1;
-    r->headers_out.content_type.data = (u_char *) "text/html; charset=utf-8";
+    r->headers_out.content_type.len = sizeof("application/json") - 1;
+    r->headers_out.content_type.data = (u_char *) "application/json";
 
     if (r->method == NGX_HTTP_HEAD) {
         r->headers_out.status = NGX_HTTP_OK;
