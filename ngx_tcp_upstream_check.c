@@ -1863,45 +1863,23 @@ ngx_tcp_upstream_check_status_handler(ngx_http_request_t *r)
     out.buf = b;
     out.next = NULL;
 
-    b->last = ngx_sprintf(b->last, 
-            "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\n"
-            "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n"
-            "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
-            "<head>\n"
-            "  <title>Nginx tcp upstream check status</title>\n"
-            "</head>\n"
-            "<body>\n"
-            "<h1>Nginx tcp upstream check status</h1>\n"
-            "<h2>Check upstream server number: %ui, shm_name: %V</h2>\n"
-            "<table style=\"background-color:white\" cellspacing=\"0\" cellpadding=\"3\" border=\"1\">\n"
-            "  <tr bgcolor=\"#C0C0C0\">\n"
-            "    <th>Index</th>\n"
-            "    <th>Name</th>\n"
-            "    <th>Status</th>\n"
-            "    <th>Busyness</th>\n"
-            "    <th>Rise counts</th>\n"
-            "    <th>Fall counts</th>\n"
-            "    <th>Access counts</th>\n"
-            "    <th>Check type</th>\n"
-            "  </tr>\n",
-            peers_conf->peers.nelts, &shm_name);
+    b->last = ngx_sprintf(b->last, "[\n",);
 
     for (i = 0; i < peers_conf->peers.nelts; i++) {
         b->last = ngx_sprintf(b->last, 
-                "  <tr%s>\n"
-                "    <td>%ui</td>\n" 
-                "    <td>%V</td>\n" 
-                "    <td>%s</td>\n" 
-                "    <td>%ui</td>\n" 
-                "    <td>%ui</td>\n" 
-                "    <td>%ui</td>\n" 
-                "    <td>%ui</td>\n" 
-                "    <td>%s</td>\n" 
-                "  </tr>\n",
-                peer_shm[i].down ? " bgcolor=\"#FF0000\"" : "",
+                "  {"
+                "    \"index\" : %ui,\n" 
+                "    \"name\" : \"%V\",\n" 
+                "    \"up\" : %s,\n" 
+                "    \"busyness\" : %ui,\n" 
+                "    \"rise_count\" : %ui,\n" 
+                "    \"fail_count\" : %ui,\n" 
+                "    \"access_count\" : %ui,\n" 
+                "    \"type\" : \"%s\"\n" 
+                "  },\n",
                 i, 
                 &peer_conf[i].peer->name, 
-                peer_shm[i].down ? "down" : "up",
+                peer_shm[i].down ? "false" : "true",
                 peer_shm[i].busyness,
                 peer_shm[i].rise_count, 
                 peer_shm[i].fall_count, 
@@ -1909,10 +1887,7 @@ ngx_tcp_upstream_check_status_handler(ngx_http_request_t *r)
                 peer_conf[i].conf->check_type_conf->name);
     }
 
-    b->last = ngx_sprintf(b->last, 
-            "</table>\n"
-            "</body>\n"
-            "</html>\n");
+    b->last = ngx_sprintf(b->last, "]\n");
 
     r->headers_out.status = NGX_HTTP_OK;
     r->headers_out.content_length_n = b->last - b->pos;
