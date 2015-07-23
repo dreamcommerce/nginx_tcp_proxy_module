@@ -456,8 +456,8 @@ ngx_tcp_upstream_get_round_robin_peer(ngx_peer_connection_t *pc, void *data)
         /* ngx_unlock_mutex(ppr->peers->mutex); */
 
 #if (NGX_THREADS)
-        c->read->lock = c->read->own_lock;
-        c->write->lock = c->write->own_lock;
+//        c->read->lock = c->read->own_lock;
+//        c->write->lock = c->write->own_lock;
 #endif
 
         pc->connection = c;
