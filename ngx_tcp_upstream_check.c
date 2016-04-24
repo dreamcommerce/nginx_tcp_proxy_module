@@ -1863,7 +1863,7 @@ ngx_tcp_upstream_check_status_handler(ngx_http_request_t *r)
     out.buf = b;
     out.next = NULL;
 
-    b->last = ngx_sprintf(b->last, "[\n",);
+    b->last = ngx_sprintf(b->last, "[\n");
 
     for (i = 0; i < peers_conf->peers.nelts; i++) {
         b->last = ngx_sprintf(b->last, 
